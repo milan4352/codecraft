@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ChatGPT Clone</title>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Clone</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f5f5f5;
-            --text-color:  #333;
-            --background-color:  #fff;
+            --primary-color: #10a37f;
+            --secondary-color: #f7f7f8;
+            --text-color: #333;
+            --background-color: #fff;
             --chat-background: #f7f7f8;
-            --user-message-bg: #4a90e2;
+            --user-message-bg: #10a37f;
             --ai-message-bg: #f7f7f8;
-            --input-background: #f0f0f0;
-            --input-border: #ddd;
+            --input-background: #fff;
+            --input-border: #ccc;
             --sidebar-background: #202123;
             --sidebar-text: #fff;
-            --box-shadow:  0 4px 6px rgba(0, 0, 0, 0.1);
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .dark-mode {
-            --primary-color: #64b5f6;
-            --secondary-color: #424242;
+            --primary-color: #19c37d;
+            --secondary-color: #343541;
             --text-color: #f5f5f5;
-            --background-color: #121212;
+            --background-color: #202123;
             --chat-background: #343541;
-            --user-message-bg: #64b5f6;
+            --user-message-bg: #19c37d;
             --ai-message-bg: #444654;
-            --input-background: #2a2a2a;
-            --input-border: #444;
+            --input-background: #40414f;
+            --input-border: #565869;
             --sidebar-background: #202123;
             --sidebar-text: #fff;
             --box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
@@ -77,16 +77,30 @@
         }
 
         .new-chat:hover {
-            background-color: #3a7bc8;
+            background-color: #0d8c6f;
+        }
+
+        .chat-history-section {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .chat-history-section h3 {
+            font-size: 14px;
+            color: var(--sidebar-text);
+            margin-bottom: 10px;
+            opacity: 0.8;
         }
 
         .chat-history {
-            margin-top: 20px;
-            flex-grow: 1;
+            max-height: calc(100vh - 200px);
             overflow-y: auto;
         }
 
         .chat-item {
+            display: flex;
+            align-items: center;
             padding: 10px;
             cursor: pointer;
             border-radius: 5px;
@@ -97,6 +111,12 @@
         .chat-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+
+        .chat-item i {
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
 
         .sidebar-footer {
             margin-top: 20px;
@@ -198,7 +218,7 @@
         }
 
         .send-button:hover {
-            background-color: #3a7bc8;
+            background-color: #0d8c6f;
         }
 
         .header {
@@ -242,7 +262,7 @@
         }
 
         .theme-toggle:hover, .menu-toggle:hover {
-            background-color: #3a7bc8;
+            background-color: #0d8c6f;
         }
 
         .menu-toggle {
@@ -275,49 +295,58 @@
                 z-index: 1001;
             }
         }
-        </style>
-    </head>
-    <body>
-        <button class="menu-toggle" id="menuToggle">
-            <i class="fas fa-bars"></i>
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="sidebar">
+        <button class="new-chat">
+            <i class="fas fa-plus"></i> New Chat
         </button>
-        <div class="sidebar">
-            <button class="new-chat">
-                <i class="fas fa-plus"></i>
-                New Chat
-            </button>
+        <div class="chat-history-section">
+            <h3>Chat History</h3>
             <div class="chat-history">
-                <!-- Chat history items will be dynamically added here --></div>
-            <div class="sidebar-footer">
-                <button id="clear-conversations">
-                    <i class="fas fa-trash"></i>
-                    Clear conversations
-                </button>
-                <button id="settings">
-                    <i class="fas fa-cog"></i>
-                    Settings
-                </button>
+                <div class="chat-item">
+                    <i class="fas fa-comment"></i> Previous Chat 1
+                </div>
+                <div class="chat-item">
+                    <i class="fas fa-comment"></i> Previous Chat 2
+                </div>
+                <div class="chat-item">
+                    <i class="fas fa-comment"></i> Previous Chat 3
+                </div>
             </div>
         </div>
-        <div class="main-content">
-            <div class="header">
-                <button id="login-btn">Log In</button>
-                <button id="register-btn">Register</button>
-                <button id="profile-btn">
-                    <i class="fas fa-user"></i>
-                </button>
-                <button id="theme-toggle" class="theme-toggle">
-                    <i class="fas fa-sun"></i>
-                </button>
-            </div>
-            <div class="chat-container">
-                <!-- Chat messages will be dynamically added here --></div>
-            <div class="input-container">
-                <input type="text" class="chat-input" placeholder="Type your message here...">
-                <button class="send-button">Send</button>
-            </div>
+        <div class="sidebar-footer">
+            <button id="clear-conversations">
+                <i class="fas fa-trash"></i> Clear conversations
+            </button>
+            <button id="settings">
+                <i class="fas fa-cog"></i> Settings
+            </button>
         </div>
-        <script>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <button id="login-btn">Log In</button>
+            <button id="register-btn">Register</button>
+            <button id="profile-btn"><i class="fas fa-user"></i></button>
+            <button id="theme-toggle" class="theme-toggle">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+        <div class="chat-container">
+            <!-- Chat messages will be dynamically added here -->
+        </div>
+        <div class="input-container">
+            <input type="text" class="chat-input" placeholder="Type your message here...">
+            <button class="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const body = document.body;
             const themeToggle = document.getElementById('theme-toggle');
@@ -396,7 +425,15 @@
                 alert('All conversations cleared.');
             });
             document.getElementById('settings').addEventListener('click', () => alert('Settings functionality would be implemented here.'));
+
+            // Handle chat history item clicks
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    alert('Loading chat: ' + this.textContent.trim());
+                    // In a real application, you would load the selected chat here
+                });
+            });
         });
-        </script>
-    </body>
+    </script>
+</body>
 </html>
