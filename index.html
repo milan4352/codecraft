@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Clone</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ChatGPT Clone</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
         :root {
             --primary-color: #10a37f;
             --secondary-color: #f7f7f8;
@@ -74,6 +74,9 @@
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .new-chat:hover {
@@ -132,11 +135,17 @@
             width: 100%;
             text-align: left;
             transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
         }
 
         .sidebar-footer button:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+
+.sidebar-footer button i {
+    margin-right: 10px;
+}
 
         .main-content {
             flex-grow: 1;
@@ -163,6 +172,10 @@
             border-radius: 10px;
             line-height: 1.4;
             animation: fadeIn 0.5s ease-out;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         @keyframes fadeIn {
@@ -182,6 +195,20 @@
             color: var(--text-color);
             align-self: flex-start;
         }
+
+.copy-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    color: var(--text-color);
+    transition: color 0.3s;
+}
+
+.copy-button:hover {
+    color: var(--primary-color);
+}
 
         .input-container {
             display: flex;
@@ -240,6 +267,8 @@
             margin-left: 10px;
             border-radius: 5px;
             transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
         }
 
         .header button:hover {
@@ -295,58 +324,64 @@
                 z-index: 1001;
             }
         }
-    </style>
-</head>
-<body>
-    <button class="menu-toggle" id="menuToggle">
-        <i class="fas fa-bars"></i>
-    </button>
-    <div class="sidebar">
-        <button class="new-chat">
-            <i class="fas fa-plus"></i> New Chat
+        </style>
+    </head>
+    <body>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
         </button>
-        <div class="chat-history-section">
-            <h3>Chat History</h3>
-            <div class="chat-history">
-                <div class="chat-item">
-                    <i class="fas fa-comment"></i> Previous Chat 1
-                </div>
-                <div class="chat-item">
-                    <i class="fas fa-comment"></i> Previous Chat 2
-                </div>
-                <div class="chat-item">
-                    <i class="fas fa-comment"></i> Previous Chat 3
+        <div class="sidebar">
+            <button class="new-chat">
+                <i class="fas fa-plus"></i>
+                New Chat
+            </button>
+            <div class="chat-history-section">
+                <h3>Chat History</h3>
+                <div class="chat-history">
+                    <div class="chat-item">
+                        <i class="fas fa-comment"></i>
+                        Previous Chat 1
+                    </div>
+                    <div class="chat-item">
+                        <i class="fas fa-comment"></i>
+                        Previous Chat 2
+                    </div>
+                    <div class="chat-item">
+                        <i class="fas fa-comment"></i>
+                        Previous Chat 3
+                    </div>
                 </div>
             </div>
+            <div class="sidebar-footer">
+                <button id="clear-conversations">
+                    <i class="fas fa-trash"></i>
+                    Clear conversations
+                </button>
+                <button id="settings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </div>
         </div>
-        <div class="sidebar-footer">
-            <button id="clear-conversations">
-                <i class="fas fa-trash"></i> Clear conversations
-            </button>
-            <button id="settings">
-                <i class="fas fa-cog"></i> Settings
-            </button>
+        <div class="main-content">
+            <div class="header">
+                <button id="login-btn">Log In</button>
+                <button id="register-btn">Register</button>
+                <button id="profile-btn">
+                    <i class="fas fa-user"></i>
+                </button>
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+            <div class="chat-container">
+                <!-- Chat messages will be dynamically added here --></div>
+            <div class="input-container">
+                <input type="text" class="chat-input" placeholder="Type your message here...">
+                <button class="send-button">Send</button>
+            </div>
         </div>
-    </div>
-    <div class="main-content">
-        <div class="header">
-            <button id="login-btn">Log In</button>
-            <button id="register-btn">Register</button>
-            <button id="profile-btn"><i class="fas fa-user"></i></button>
-            <button id="theme-toggle" class="theme-toggle">
-                <i class="fas fa-sun"></i>
-            </button>
-        </div>
-        <div class="chat-container">
-            <!-- Chat messages will be dynamically added here -->
-        </div>
-        <div class="input-container">
-            <input type="text" class="chat-input" placeholder="Type your message here...">
-            <button class="send-button">Send</button>
-        </div>
-    </div>
-
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             const body = document.body;
             const themeToggle = document.getElementById('theme-toggle');
@@ -400,7 +435,18 @@
             function addMessage(sender, content) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'ai-message');
-                messageDiv.textContent = content;
+
+const messageContent = document.createElement('span');
+messageContent.textContent = content;
+
+const copyButton = document.createElement('button');
+copyButton.classList.add('copy-button');
+copyButton.title = 'Copy';
+copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+
+messageDiv.appendChild(messageContent);
+messageDiv.appendChild(copyButton);
+
                 chatContainer.appendChild(messageDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
@@ -433,7 +479,23 @@
                     // In a real application, you would load the selected chat here
                 });
             });
+            
+            // Copy message functionality
+            chatContainer.addEventListener('click', function (e) {
+                if (e.target.closest('.copy-button')) {
+                    const messageDiv = e.target.closest('.message');
+                    const messageText = messageDiv.querySelector('span').textContent.trim();
+
+                    navigator.clipboard.writeText(messageText).then(() => {
+                        // Optionally, show a tooltip or temporary message instead of alert
+                        alert('Message copied to clipboard!');
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        alert('Failed to copy message.');
+                    });
+                }
+            });
         });
-    </script>
-</body>
+        </script>
+    </body>
 </html>
